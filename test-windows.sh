@@ -18,11 +18,11 @@ echo
 # Change to the CLI directory
 cd "$(dirname "$0")/eknova-cli"
 
-echo -e "${YELLOW}🔨 Building eknova CLI in WSL...${NC}"
+echo -e "${YELLOW}🔨 Building eknova CLI for Windows compatibility...${NC}"
 
-# Build the project
-if ./gradlew build -x test -q; then
-    echo -e "${GREEN}✅ Build successful${NC}"
+# Clean and build the project with Java 11 compatibility
+if ./gradlew clean build -x test -q; then
+    echo -e "${GREEN}✅ Build successful (Java 11 compatible)${NC}"
 else
     echo -e "${RED}❌ Build failed${NC}"
     exit 1
@@ -53,9 +53,16 @@ echo -e "${BLUE}📍 Test Location:${NC} C:\\Users\\${WINDOWS_USER}\\Desktop\\ek
 echo
 echo -e "${YELLOW}🚀 To test from Windows PowerShell:${NC}"
 echo "1. Open Windows PowerShell (not WSL)"
-echo "2. Navigate to: cd C:\\Users\\${WINDOWS_USER}\\Desktop\\eknova-test"
-echo "3. Run: .\\ekn.bat --help"
-echo "4. Test: .\\ekn.bat version --full"
-echo "5. Test: .\\ekn.bat list"
+echo "2. Check Java version: java -version"
+echo "   ${YELLOW}(Need Java 11+ for compatibility)${NC}"
+echo "3. Navigate to: cd C:\\Users\\${WINDOWS_USER}\\Desktop\\eknova-test"
+echo "4. Run: .\\ekn.bat --help"
+echo "5. Test: .\\ekn.bat version --full"
+echo "6. Test: .\\ekn.bat list"
+echo
+echo -e "${BLUE}📝 Java Requirements:${NC}"
+echo "• Minimum: Java 11"
+echo "• Recommended: Java 17 or Java 21 LTS"
+echo "• Download: https://adoptium.net/temurin/releases/"
 echo
 echo -e "${GREEN}✨ Ready for Windows testing!${NC}"
