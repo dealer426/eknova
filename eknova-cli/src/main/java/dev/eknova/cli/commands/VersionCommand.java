@@ -5,6 +5,9 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.ParentCommand;
 
 import dev.eknova.cli.NovaCommand;
+import dev.eknova.cli.service.WSLService;
+
+import jakarta.inject.Inject;
 
 /**
  * Show version and system information
@@ -22,6 +25,9 @@ public class VersionCommand implements Runnable {
 
     @ParentCommand
     NovaCommand parent;
+
+    @Inject
+    WSLService wslService;
 
     @Option(names = {"--full"}, description = "Show detailed system information")
     boolean fullInfo;
@@ -58,12 +64,18 @@ public class VersionCommand implements Runnable {
     
     private void checkWSLStatus() {
         try {
-            // TODO: Execute wsl --list command to check WSL availability
-            System.out.println("  Status: Available ✅");
-            System.out.println("  Version: WSL 2 (detected)");
-            System.out.println("  Distributions: 3 installed");
+            WSLService.WSLInfo wslInfo = wslService.getWSLInfo();
+            
+            if (wslInfo.isAvailable()) {
+                System.out.println("  Status: Available ✅");
+                System.out.println("  Version: " + wslInfo.getVersion());
+                System.out.println("  Distributions: " + wslInfo.getDistributionCount() + " installed");
+            } else {
+                System.out.println("  Status: Not available ❌");
+                System.out.println("  Error: " + wslInfo.getVersion());
+            }
         } catch (Exception e) {
-            System.out.println("  Status: Not available ❌");
+            System.out.println("  Status: Error ❌");
             System.out.println("  Error: " + e.getMessage());
         }
     }

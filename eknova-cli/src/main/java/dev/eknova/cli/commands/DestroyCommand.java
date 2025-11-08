@@ -6,6 +6,12 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.ParentCommand;
 
 import dev.eknova.cli.NovaCommand;
+import dev.eknova.cli.model.Environment;
+import dev.eknova.cli.service.WSLService;
+
+import jakarta.inject.Inject;
+import java.io.Console;
+import java.util.List;
 
 /**
  * Clean up and remove an environment
@@ -25,6 +31,9 @@ public class DestroyCommand implements Runnable {
 
     @ParentCommand
     NovaCommand parent;
+
+    @Inject
+    WSLService wslService;
 
     @Parameters(
         index = "0",
@@ -79,9 +88,8 @@ public class DestroyCommand implements Runnable {
             System.out.println("  Keep data: " + keepData);
         }
 
-        // TODO: Check if environment exists
-        boolean exists = checkEnvironmentExists(envName);
-        if (!exists) {
+        // Check if environment exists
+        if (!wslService.environmentExists(envName)) {
             System.err.println("❌ Environment '" + envName + "' not found");
             System.exit(1);
         }
@@ -89,53 +97,57 @@ public class DestroyCommand implements Runnable {
         // Confirmation prompt unless --force
         if (!force) {
             System.out.print("⚠️  Are you sure you want to destroy '" + envName + "'? (y/N): ");
-            String response = System.console() != null ? System.console().readLine() : "N";
+            Console console = System.console();
+            String response = console != null ? console.readLine() : "N";
             if (!response.toLowerCase().startsWith("y")) {
                 System.out.println("Operation cancelled.");
                 return;
             }
         }
 
-        // TODO: Implement destruction logic
-        // 1. Stop environment if running
-        // 2. Export/backup user data if --keep-data
-        // 3. Remove WSL distribution
-        // 4. Clean up Nova API records
-        // 5. Remove local metadata
-
+        // Implement destruction logic
         System.out.println("  Stopping environment...");
-        System.out.println("  Removing WSL distribution...");
-        
-        if (!keepData) {
-            System.out.println("  Cleaning up data...");
-        } else {
-            System.out.println("  Preserving user data...");
+        boolean stopped = wslService.stopEnvironment(envName);
+        if (!stopped && parent.isVerbose()) {
+            System.out.println("  (Environment may not have been running)");
         }
         
-        System.out.println("  Updating registry...");
-        System.out.println("✅ Environment '" + envName + "' destroyed successfully!");
+        if (!keepData) {
+            System.out.println("  Removing WSL distribution...");
+            boolean removed = wslService.removeEnvironment(envName);
+            if (removed) {
+                System.out.println("✅ Environment '" + envName + "' destroyed successfully!");
+            } else {
+                System.err.println("❌ Failed to remove WSL distribution for '" + envName + "'");
+                System.exit(1);
+            }
+        } else {
+            System.out.println("  Preserving user data (--keep-data specified)...");
+            System.out.println("⚠️  Environment stopped but WSL distribution preserved");
+        }
     }
 
     private void destroyAllEnvironments() {
         System.out.println("🗑️  Destroying all eknova environments...");
 
-        // TODO: Get list of all eknova environments
-        String[] environments = {"ml-cuda-dev", "go-microservice", "react-app"}; // Mock data
+        // Get list of all eknova environments
+        List<Environment> environments = wslService.listEnvironments();
 
-        if (environments.length == 0) {
+        if (environments.isEmpty()) {
             System.out.println("No eknova environments found.");
             return;
         }
 
-        System.out.println("Found " + environments.length + " environment(s):");
-        for (String env : environments) {
-            System.out.println("  - " + env);
+        System.out.println("Found " + environments.size() + " environment(s):");
+        for (Environment env : environments) {
+            System.out.println("  - " + env.getName() + " (" + env.getStatus().getDisplayName() + ")");
         }
 
         // Confirmation prompt unless --force
         if (!force) {
             System.out.print("⚠️  Are you sure you want to destroy ALL environments? (y/N): ");
-            String response = System.console() != null ? System.console().readLine() : "N";
+            Console console = System.console();
+            String response = console != null ? console.readLine() : "N";
             if (!response.toLowerCase().startsWith("y")) {
                 System.out.println("Operation cancelled.");
                 return;
@@ -143,17 +155,37 @@ public class DestroyCommand implements Runnable {
         }
 
         // Destroy each environment
-        for (String env : environments) {
-            System.out.println("Destroying " + env + "...");
-            // TODO: Call destroySingleEnvironment logic for each
+        int success = 0;
+        int failed = 0;
+        
+        for (Environment env : environments) {
+            System.out.println("Destroying " + env.getName() + "...");
+            
+            // Stop and remove the environment
+            wslService.stopEnvironment(env.getName());
+            
+            if (!keepData) {
+                boolean removed = wslService.removeEnvironment(env.getName());
+                if (removed) {
+                    success++;
+                    System.out.println("  ✅ " + env.getName() + " destroyed");
+                } else {
+                    failed++;
+                    System.out.println("  ❌ Failed to destroy " + env.getName());
+                }
+            } else {
+                success++;
+                System.out.println("  ⚠️  " + env.getName() + " stopped (data preserved)");
+            }
         }
 
-        System.out.println("✅ All environments destroyed successfully!");
+        System.out.println();
+        if (failed == 0) {
+            System.out.println("✅ All environments destroyed successfully!");
+        } else {
+            System.out.println("⚠️  " + success + " environments destroyed, " + failed + " failed");
+        }
     }
 
-    private boolean checkEnvironmentExists(String envName) {
-        // TODO: Check with Nova API and WSL
-        // For now, mock that environments exist
-        return true;
-    }
+
 }
