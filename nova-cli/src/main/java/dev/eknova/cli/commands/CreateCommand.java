@@ -10,10 +10,10 @@ import dev.eknova.cli.NovaCommand;
  * Create a new environment interactively
  * 
  * Examples:
- *   nova create                     # Interactive creation
- *   nova create --base ubuntu       # Start with Ubuntu base
- *   nova create --name my-env       # Specify environment name
- *   nova create --template go       # Use Go development template
+ *   ekn create                     # Interactive creation
+ *   ekn create --base ubuntu       # Start with Ubuntu base
+ *   ekn create --name my-env       # Specify environment name
+ *   ekn create --template go       # Use Go development template
  */
 @Command(
     name = "create",

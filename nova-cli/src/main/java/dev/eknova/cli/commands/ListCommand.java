@@ -10,9 +10,9 @@ import dev.eknova.cli.NovaCommand;
  * List all local eknova environments
  * 
  * Examples:
- *   nova list              # List all environments  
- *   nova list --running    # Only running environments
- *   nova list --json       # JSON output format
+ *   ekn list              # List all environments  
+ *   ekn list --running    # Only running environments
+ *   ekn list --json       # JSON output format
  */
 @Command(
     name = "list",
@@ -76,8 +76,8 @@ public class ListCommand implements Runnable {
         System.out.printf("%-20s %-12s %-15s %-30s%n", "react-app", "Running", "local/react.yaml", "2024-01-13 09:15:33");
         
         System.out.println();
-        System.out.println("💡 Use 'nova up <name>' to start stopped environments");
-        System.out.println("💡 Use 'nova destroy <name>' to remove environments");
+        System.out.println("💡 Use 'ekn up <name>' to start stopped environments");
+        System.out.println("💡 Use 'ekn destroy <name>' to remove environments");
     }
 
     private void outputJson() {

@@ -11,9 +11,9 @@ import dev.eknova.cli.NovaCommand;
  * Provision and start an environment from a blueprint
  * 
  * Examples:
- *   nova up @user/ml-cuda           # From marketplace blueprint
- *   nova up ./blueprint.yaml       # From local blueprint
- *   nova up --name my-env @user/go  # Custom environment name
+ *   ekn up @user/ml-cuda           # From marketplace blueprint
+ *   ekn up ./blueprint.yaml       # From local blueprint
+ *   ekn up --name my-env @user/go  # Custom environment name
  */
 @Command(
     name = "up",

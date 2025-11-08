@@ -11,21 +11,21 @@ import dev.eknova.cli.commands.CreateCommand;
 import dev.eknova.cli.commands.VersionCommand;
 
 /**
- * Main Nova CLI command - entry point for all eknova operations
+ * Main eknova CLI command - entry point for all eknova operations
  * 
  * eknova - AI-powered WSL development environments
  * 
  * Examples:
- *   nova up @user/ml-cuda          # Provision environment from blueprint
- *   nova create --base ubuntu      # Create new environment  
- *   nova list                      # List environments
- *   nova destroy my-env            # Clean up environment
+ *   ekn up @user/ml-cuda          # Provision environment from blueprint
+ *   ekn create --base ubuntu      # Create new environment  
+ *   ekn list                      # List environments
+ *   ekn destroy my-env            # Clean up environment
  */
 @Command(
-    name = "nova",
+    name = "ekn",
     description = "AI-powered WSL development environments",
     mixinStandardHelpOptions = true,
-    version = "nova 1.0.0-SNAPSHOT",
+    version = "ekn 1.0.0-SNAPSHOT",
     subcommands = {
         UpCommand.class,
         ListCommand.class, 
@@ -52,7 +52,7 @@ public class NovaCommand implements Runnable {
         // When no subcommand is specified, show help
         System.out.println("🚀 eknova - AI-powered WSL development environments");
         System.out.println();
-        System.out.println("Usage: nova <command> [options]");
+        System.out.println("Usage: ekn <command> [options]");
         System.out.println();
         System.out.println("Commands:");
         System.out.println("  up       Provision environment from blueprint");
@@ -62,12 +62,12 @@ public class NovaCommand implements Runnable {
         System.out.println("  version  Show version information");
         System.out.println();
         System.out.println("Examples:");
-        System.out.println("  nova up @user/ml-cuda          # Provision from marketplace");
-        System.out.println("  nova create --base ubuntu      # Create Ubuntu environment");
-        System.out.println("  nova list                      # Show all environments");
-        System.out.println("  nova destroy my-env            # Remove environment");
+        System.out.println("  ekn up @user/ml-cuda          # Provision from marketplace");
+        System.out.println("  ekn create --base ubuntu      # Create Ubuntu environment");
+        System.out.println("  ekn list                      # Show all environments");
+        System.out.println("  ekn destroy my-env            # Remove environment");
         System.out.println();
-        System.out.println("Use 'nova <command> --help' for command-specific help.");
+        System.out.println("Use 'ekn <command> --help' for command-specific help.");
     }
 
     // Getters for global options that subcommands can access

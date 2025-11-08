@@ -11,9 +11,9 @@ import dev.eknova.cli.NovaCommand;
  * Clean up and remove an environment
  * 
  * Examples:
- *   nova destroy my-env          # Remove specific environment
- *   nova destroy --all           # Remove all environments
- *   nova destroy --force my-env  # Skip confirmation prompt
+ *   ekn destroy my-env          # Remove specific environment
+ *   ekn destroy --all           # Remove all environments
+ *   ekn destroy --force my-env  # Skip confirmation prompt
  */
 @Command(
     name = "destroy",

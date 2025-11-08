@@ -1,81 +1,181 @@
-# nova-cli
+# eknova CLI
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+The `ekn` command-line interface for **eknova** - AI-powered WSL development environments.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+Built with **Quarkus** for blazing-fast startup (<10ms) and small binary size (~25MB) using GraalVM native compilation.
 
-## Running the application in dev mode
+## 🚀 Quick Start
 
-You can run your application in dev mode that enables live coding using:
+```bash
+# Basic usage
+ekn --help                              # Show help
+ekn version --full                      # System information
 
-```shell script
+# Environment management  
+ekn up @user/ml-cuda                    # Provision from blueprint
+ekn create --base ubuntu --template go  # Create interactively
+ekn list                                # List environments
+ekn destroy my-env                      # Clean up environment
+```
+
+## 📋 Commands
+
+### `ekn up <blueprint>`
+Provision and start an environment from a blueprint.
+
+```bash
+ekn up @user/ml-cuda                    # From marketplace
+ekn up ./my-blueprint.yaml             # From local file
+ekn up --name custom-env @user/go-api   # With custom name
+ekn up --force @user/python-ml          # Force recreation
+```
+
+### `ekn create`
+Create a new environment interactively.
+
+```bash
+ekn create                              # Interactive mode
+ekn create --base ubuntu --template python
+ekn create --name my-env --output blueprint.yaml
+```
+
+### `ekn list`
+List all local eknova environments.
+
+```bash
+ekn list                                # All environments
+ekn list --running                      # Only running
+ekn list --json                         # JSON output
+```
+
+### `ekn destroy <environment>`
+Clean up and remove environments.
+
+```bash
+ekn destroy my-env                      # Remove specific
+ekn destroy --all                       # Remove all
+ekn destroy --force my-env              # Skip confirmation
+```
+
+### `ekn version`
+Show version and system information.
+
+```bash
+ekn version                             # Basic version
+ekn version --full                      # Detailed system info
+```
+
+## 🛠️ Development
+
+### Running in Dev Mode
+
+```bash
 ./gradlew quarkusDev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+> **Note:** Dev mode enables live coding and includes a Dev UI at http://localhost:8080/q/dev/
 
-## Packaging and running the application
+### Testing Commands in Dev Mode
 
-The application can be packaged using:
+```bash
+# Pass arguments to the CLI in dev mode
+./gradlew quarkusDev --quarkus-args='list --help'
+./gradlew quarkusDev --quarkus-args='version --full'
+```
 
-```shell script
+### Building
+
+#### JVM Mode (Development)
+```bash
 ./gradlew build
+java -jar build/quarkus-app/quarkus-run.jar --help
 ```
 
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./gradlew build -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
+#### Native Binary (Production)
+```bash
 ./gradlew build -Dquarkus.native.enabled=true
+./build/eknova-cli-1.0.0-SNAPSHOT-runner --help
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
+#### Container Build (if no GraalVM locally)
+```bash
 ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./build/nova-cli-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling>.
-
-## Related Guides
-
-- Picocli ([guide](https://quarkus.io/guides/picocli)): Develop command line applications with Picocli
-- REST Client ([guide](https://quarkus.io/guides/rest-client)): Call REST services
-
-## Provided Code
-
-### Picocli Example
-
-Hello and goodbye are civilization fundamentals. Let's not forget it with this example picocli application by changing the <code>command</code> and <code>parameters</code>.
-
-[Related guide section...](https://quarkus.io/guides/picocli#command-line-application-with-multiple-commands)
-
-Also for picocli applications the dev mode is supported. When running dev mode, the picocli application is executed and on press of the Enter key, is restarted.
-
-As picocli applications will often require arguments to be passed on the commandline, this is also possible in dev mode via:
-
-```shell script
-./gradlew quarkusDev --quarkus-args='Quarky'
+### Creating an Uber JAR
+```bash
+./gradlew build -Dquarkus.package.jar.type=uber-jar
+java -jar build/eknova-cli-1.0.0-SNAPSHOT-runner.jar --help
 ```
 
-### REST Client
+## 🏗️ Architecture
 
-Invoke different services through REST with JSON
+```
+eknova CLI (Quarkus + Picocli)
+├── NovaCommand.java           # Main entry point
+├── commands/                  # Subcommands
+│   ├── UpCommand.java        # Provision environments
+│   ├── CreateCommand.java    # Interactive creation
+│   ├── ListCommand.java      # List environments
+│   ├── DestroyCommand.java   # Clean up
+│   └── VersionCommand.java   # Version info
+├── client/                   # API clients
+│   └── EknovaApiClient.java  # REST client for eknova-api
+└── model/                    # Data models
+    ├── Blueprint.java        # Blueprint definitions
+    └── Environment.java      # Environment metadata
+```
 
-[Related guide section...](https://quarkus.io/guides/rest-client)
+## 🔧 Configuration
+
+Configuration is handled via `application.properties`:
+
+```properties
+# CLI configuration
+quarkus.application.name=ekn
+quarkus.picocli.top-command=dev.eknova.cli.NovaCommand
+
+# API connection
+eknova.api.base-url=http://localhost:5000
+eknova.api.timeout=30s
+
+# Logging
+quarkus.log.level=INFO
+quarkus.log.category."dev.eknova".level=DEBUG
+```
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+./gradlew test
+
+# Run specific test class
+./gradlew test --tests="*NovaCommandTest"
+
+# Run with coverage
+./gradlew test jacocoTestReport
+```
+
+## 📦 Dependencies
+
+- **Quarkus Core** - Application framework
+- **Picocli** - Command line interface framework
+- **REST Client** - HTTP client for nova-api communication
+- **Jackson** - JSON serialization
+- **Config YAML** - YAML configuration support
+
+## 🔗 Integration
+
+The CLI communicates with the **eknova-api** (Aspire .NET) backend for:
+- Blueprint validation and retrieval
+- Environment lifecycle management
+- WSL orchestration commands
+- Metadata storage and retrieval
+
+## 📚 Related Documentation
+
+- [Quarkus CLI Guide](https://quarkus.io/guides/picocli)
+- [Quarkus Native Guide](https://quarkus.io/guides/building-native-image)
+- [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/)
+- [Picocli Documentation](https://picocli.info/)

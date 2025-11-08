@@ -10,8 +10,8 @@ import dev.eknova.cli.NovaCommand;
  * Show version and system information
  * 
  * Examples:
- *   nova version          # Show version
- *   nova version --full   # Show detailed system info
+ *   ekn version          # Show version
+ *   ekn version --full   # Show detailed system info
  */
 @Command(
     name = "version",
@@ -45,7 +45,7 @@ public class VersionCommand implements Runnable {
             checkWSLStatus();
             
             System.out.println();
-            System.out.println("Nova API:");
+            System.out.println("eknova API:");
             System.out.println("  URL: " + parent.getApiUrl());
             checkAPIStatus();
         }
@@ -70,7 +70,7 @@ public class VersionCommand implements Runnable {
     
     private void checkAPIStatus() {
         try {
-            // TODO: Make health check request to Nova API
+            // TODO: Make health check request to eknova API
             System.out.println("  Status: Connected ✅");
             System.out.println("  Version: 1.0.0-SNAPSHOT");
         } catch (Exception e) {

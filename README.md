@@ -143,10 +143,10 @@ npm install && npm run dev
 
 ```bash
 # Use the CLI to create your first environment
-./nova-cli/build/nova-cli-1.0.0-SNAPSHOT-runner up @templates/ubuntu-python
+ekn up @templates/ubuntu-python
 
-# Or use AI to generate one
-./nova-cli/build/nova-cli-1.0.0-SNAPSHOT-runner ai "Ubuntu with Python ML and Jupyter"
+# Or create interactively
+ekn create --base ubuntu --template python
 ```
 
 ---
@@ -155,19 +155,16 @@ npm install && npm run dev
 
 ```bash
 # Core commands
-nova up @user/blueprint-name              # Provision environment
-nova create --base ubuntu --profile python # Create from components  
-nova list                                 # List local environments
-nova destroy env-name                     # Clean up environment
+ekn up @user/blueprint-name              # Provision environment
+ekn create --base ubuntu --template python # Create from components  
+ekn list                                 # List local environments
+ekn destroy env-name                     # Clean up environment
 
-# AI-powered commands
-nova ai "Python ML with GPU support"      # Generate blueprint from text
-nova remix @user/ml-env "add Rust"        # AI remix existing blueprint
-
-# Sharing commands
-nova publish my-env                       # Share to marketplace
-nova export my-env --output ./backup.tar  # Export for backup
-nova import ./backup.tar --name restored  # Import backup
+# Examples
+ekn up @user/ml-cuda                     # Provision ML environment with CUDA
+ekn create --name my-go-env --base ubuntu --template go
+ekn list --running                       # Show only running environments
+ekn destroy --all --force               # Clean up all environments
 ```
 
 ---
