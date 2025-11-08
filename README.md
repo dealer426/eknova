@@ -62,7 +62,7 @@
 
 ```
 eknova/
-├── nova-cli/                    # Quarkus CLI (Java 23 + Gradle)
+├── eknova-cli/                  # Quarkus CLI (Java 23 + Gradle)
 │   ├── src/main/java/dev/eknova/cli/
 │   │   ├── NovaCommand.java     # Main CLI entry point
 │   │   ├── commands/            # CLI subcommands
@@ -70,14 +70,14 @@ eknova/
 │   ├── build.gradle             # Gradle build with native compilation
 │   └── README.md
 │
-├── nova-api/                    # Aspire API (.NET 9.0)
-│   ├── nova-api.AppHost/        # Aspire orchestration
-│   ├── nova-api.ApiService/     # REST API + AI services
-│   ├── nova-api.ServiceDefaults/# Shared configuration
-│   ├── nova-api.Web/            # Blazor admin UI (optional)
-│   └── nova-api.sln
+├── eknova-api/                  # Aspire API (.NET 9.0)
+│   ├── eknova-api.AppHost/      # Aspire orchestration
+│   ├── eknova-api.ApiService/   # REST API + AI services
+│   ├── eknova-api.ServiceDefaults/ # Shared configuration
+│   ├── eknova-api.Web/          # Blazor admin UI (optional)
+│   └── eknova-api.sln
 │
-├── nova-web/                    # Next.js Web UI
+├── eknova-web/                  # Next.js Web UI
 │   ├── app/                     # App Router pages
 │   ├── components/              # React components
 │   ├── lib/                     # Utilities and API clients
@@ -129,12 +129,12 @@ dotnet run --project nova-api.AppHost
 # Dashboard: https://localhost:18888
 
 # Terminal 2: Build the CLI (Quarkus)
-cd nova-cli
+cd eknova-cli
 ./gradlew build -Dquarkus.native.enabled=true
-# Binary: build/nova-cli-1.0.0-SNAPSHOT-runner
+# Binary: build/eknova-cli-1.0.0-SNAPSHOT-runner
 
 # Terminal 3: Start the Web UI (Next.js)  
-cd nova-web
+cd eknova-web
 npm install && npm run dev
 # Web UI: http://localhost:3000
 ```
@@ -201,15 +201,15 @@ eknova uses a dual AI approach:
 
 ```bash
 # CLI (Native binary)
-cd nova-cli
+cd eknova-cli
 ./gradlew build -Dquarkus.native.enabled=true
 
 # API (Aspire)
-cd nova-api  
+cd eknova-api  
 dotnet build
 
 # Web UI
-cd nova-web
+cd eknova-web
 npm run build
 ```
 
@@ -217,26 +217,26 @@ npm run build
 
 ```bash
 # CLI (JVM mode for faster iteration)
-cd nova-cli && ./gradlew quarkusDev
+cd eknova-cli && ./gradlew quarkusDev
 
 # API (Hot reload)
-cd nova-api && dotnet watch --project nova-api.AppHost
+cd eknova-api && dotnet watch --project eknova-api.AppHost
 
 # Web UI (Hot reload)
-cd nova-web && npm run dev
+cd eknova-web && npm run dev
 ```
 
 ### Testing
 
 ```bash
 # CLI tests
-cd nova-cli && ./gradlew test
+cd eknova-cli && ./gradlew test
 
 # API tests  
-cd nova-api && dotnet test
+cd eknova-api && dotnet test
 
 # Web UI tests
-cd nova-web && npm test
+cd eknova-web && npm test
 ```
 
 ---

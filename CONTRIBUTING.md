@@ -21,7 +21,7 @@ cd eknova
 
 eknova uses a hybrid architecture with three main components:
 
-- **nova-cli** - Quarkus (Java 23 + Gradle)
+- **eknova-cli** - Quarkus (Java 23 + Gradle)
 - **nova-api** - Aspire (.NET 9.0)  
 - **nova-web** - Next.js (TypeScript + Tailwind)
 
@@ -70,8 +70,9 @@ Follow the coding standards for each component:
 
 ```bash
 # Test CLI
-cd nova-cli
-./gradlew test
+```bash
+cd eknova-cli
+./gradlew quarkusDev
 
 # Test API
 cd nova-api
@@ -161,7 +162,7 @@ Use the feature request template in GitHub Issues.
 ./scripts/test-all.sh
 
 # Component-specific tests
-cd nova-cli && ./gradlew test
+cd eknova-cli && ./gradlew test
 cd nova-api && dotnet test  
 cd nova-web && npm test
 ```
