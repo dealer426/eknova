@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\nova-api.ServiceDefaults\nova-api.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\eknova-api.ServiceDefaults\eknova-api.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
   </ItemGroup>
 
 </Project>

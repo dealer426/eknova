@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\nova-api.ApiService\nova-api.ApiService.csproj" />
-    <ProjectReference Include="..\nova-api.Web\nova-api.Web.csproj" />
+    <ProjectReference Include="..\eknova-api.ApiService\eknova-api.ApiService.csproj" />
+    <ProjectReference Include="..\eknova-api.Web\eknova-api.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

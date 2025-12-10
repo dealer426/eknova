@@ -1,5 +1,5 @@
-using nova_api.Web;
-using nova_api.Web.Components;
+using eknova_api.Web;
+using eknova_api.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

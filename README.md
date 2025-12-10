@@ -124,8 +124,8 @@ This installs:
 
 ```bash
 # Terminal 1: Start the API (Aspire)
-cd nova-api
-dotnet run --project nova-api.AppHost
+cd eknova-api
+dotnet run --project eknova-api.AppHost
 # Dashboard: https://localhost:18888
 
 # Terminal 2: Build the CLI (Quarkus)

@@ -1,9 +1,9 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var apiService = builder.AddProject<Projects.nova_api_ApiService>("apiservice")
+var apiService = builder.AddProject<Projects.eknova_api_ApiService>("apiservice")
     .WithHttpHealthCheck("/health");
 
-builder.AddProject<Projects.nova_api_Web>("webfrontend")
+builder.AddProject<Projects.eknova_api_Web>("webfrontend")
     .WithExternalHttpEndpoints()
     .WithHttpHealthCheck("/health")
     .WithReference(apiService)

@@ -1,4 +1,4 @@
-namespace nova_api.Web;
+namespace eknova_api.Web;
 
 public class WeatherApiClient(HttpClient httpClient)
 {
